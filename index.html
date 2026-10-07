@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextGen Field Diagnostic: 10-Point Scorecard</title>
+<style>
+  :root {
+    --bg: #0b1120;
+    --card-bg: #1e293b;
+    --accent-blue: #38bdf8;
+    --border: #334155;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --star-gold: #facc15;
+    --red: #ef4444;
+    --yellow: #eab308;
+    --green: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 30px 15px;
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    max-width: 960px;
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  }
+  header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    color: var(--accent-blue);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 25px;
+  }
+  @media(max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .item-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .item-header {
+    margin-bottom: 10px;
+  }
+  .item-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent-blue);
+    margin-bottom: 3px;
+  }
+  .item-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+  .score-slider-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: #334155;
+    outline: none;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--star-gold);
+    cursor: pointer;
+  }
+  .score-badge {
+    width: 28px;
+    text-align: right;
+    font-weight: 700;
+    color: var(--star-gold);
+    font-size: 14px;
+  }
+  .score-panel {
+    background: #1e293b;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .score-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .total-score {
+    font-size: 32px;
+    font-weight: 900;
+  }
+  .status-badge {
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .zone-bars {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    font-size: 11px;
+    text-align: center;
+    font-weight: 600;
+  }
+  .zone-bar {
+    padding: 8px 4px;
+    border-radius: 6px;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+  }
+  .zone-bar.active {
+    opacity: 1;
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(255,255,255,0.15);
+  }
+  .zone-red { background: rgba(239, 68, 68, 0.25); color: var(--red); border: 1px solid var(--red); }
+  .zone-yellow { background: rgba(234, 179, 8, 0.25); color: var(--yellow); border: 1px solid var(--yellow); }
+  .zone-green { background: rgba(34, 197, 94, 0.25); color: var(--green); border: 1px solid var(--green); }
+  .cta-box {
+    margin-top: 15px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding-top: 15px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: var(--accent-blue);
+    color: #0b1120;
+    font-weight: 800;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: opacity 0.2s;
+  }
+  .cta-btn:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>NextGen Field Diagnostic: 10-Point Scorecard</h1>
+    <div class="subtitle">Building People vs. Using People: The Structural Audit for High-Trust Growth</div>
+  </header>
+
+  <div class="grid" id="questions-grid"></div>
+
+  <div class="score-panel">
+    <div class="score-display">
+      <div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Diagnostic Total</div>
+        <div class="total-score" id="total-val">50 <span style="font-size:18px; color:var(--text-muted); font-weight:500;">/ 100</span></div>
+      </div>
+      <div class="status-badge" id="status-tag">Evaluating...</div>
+    </div>
+
+    <div class="zone-bars">
+      <div class="zone-bar zone-red" id="bar-red">
+        <strong>Red Zone (0–40)</strong><br>Survival Mode: Field Leaking
+      </div>
+      <div class="zone-bar zone-yellow" id="bar-yellow">
+        <strong>Yellow Zone (41–70)</strong><br>Building Coherence: Structure Forming
+      </div>
+      <div class="zone-bar zone-green" id="bar-green">
+        <strong>Green Zone (71–100)</strong><br>NextGen Standard: High-Reliability
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <a href="https://www.amazon.com/dp/B0HDZMBX25" target="_blank" class="cta-btn">Read The Autonomy Audit on Amazon &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const items = [
+  { id: 1, title: "1. Autonomy", desc: "Company runs for 30 days without owner input?", def: 5 },
+  { id: 2, title: "2. Epistemology", desc: "Formal 'Argue-With-Yourself' protocol for big decisions?", def: 5 },
+  { id: 3, title: "3. Risk Alignment", desc: "Leader reward directly tied to employee flourishing?", def: 5 },
+  { id: 4, title: "4. Integrity Baseline", desc: "Would you lose money to keep a promise? (Mirror Test)", def: 5 },
+  { id: 5, title: "5. Skill Pipeline", desc: "Clear 2-year roadmap for employee market value increase?", def: 5 },
+  { id: 6, title: "6. Information Flow", desc: "Knowledge exported to front lines, not hoarded?", def: 5 },
+  { id: 7, title: "7. Empathy Capture", desc: "System rewards 'above-and-beyond' decency?", def: 5 },
+  { id: 8, title: "8. Predictive Modeling", desc: "Focus on engineering prevention, not just fixing mistakes?", def: 5 },
+  { id: 9, title: "9. Time Horizon", desc: "Decisions for 10 years from now, not just 3 weeks?", def: 5 },
+  { id: 10, title: "10. The Teacher Standard", desc: "Goal is to make client/employee so competent they don't need you?", def: 5 }
+];
+
+const grid = document.getElementById("questions-grid");
+items.forEach(it => {
+  const card = document.createElement("div");
+  card.className = "item-card";
+  card.innerHTML = `
+    <div class="item-header">
+      <div class="item-title">${it.title}</div>
+      <div class="item-desc">${it.desc}</div>
+    </div>
+    <div class="score-slider-wrap">
+      <input type="range" min="1" max="10" value="${it.def}" class="slider" id="sl-${it.id}" oninput="updateScore()">
+      <div class="score-badge" id="val-${it.id}">${it.def}</div>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+function updateScore() {
+  let total = 0;
+  items.forEach(it => {
+    const v = parseInt(document.getElementById(`sl-${it.id}`).value);
+    document.getElementById(`val-${it.id}`).innerText = v;
+    total += v;
+  });
+  document.getElementById("total-val").innerHTML = `${total} <span style="font-size:18px; color:var(--text-muted); font-weight:500;">/ 100</span>`;
+  
+  const tag = document.getElementById("status-tag");
+  const bRed = document.getElementById("bar-red");
+  const bYellow = document.getElementById("bar-yellow");
+  const bGreen = document.getElementById("bar-green");
+
+  bRed.classList.remove("active");
+  bYellow.classList.remove("active");
+  bGreen.classList.remove("active");
+
+  if(total <= 40) {
+    tag.style.background = "rgba(239, 68, 68, 0.2)";
+    tag.style.color = "#ef4444";
+    tag.style.border = "1px solid #ef4444";
+    tag.innerText = "Survival Mode: Field Leaking";
+    bRed.classList.add("active");
+  } else if(total <= 70) {
+    tag.style.background = "rgba(234, 179, 8, 0.2)";
+    tag.style.color = "#eab308";
+    tag.style.border = "1px solid #eab308";
+    tag.innerText = "Building Coherence";
+    bYellow.classList.add("active");
+  } else {
+    tag.style.background = "rgba(34, 197, 94, 0.2)";
+    tag.style.color = "#22c55e";
+    tag.style.border = "1px solid #22c55e";
+    tag.innerText = "High-Reliability Organization";
+    bGreen.classList.add("active");
+  }
+}
+updateScore();
+</script>
+</body>
+</html>
